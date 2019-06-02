@@ -1,0 +1,61 @@
+#include <string>
+#include <vector>
+#include <algorithm>
+
+using namespace std;
+
+void check(vector<int> lost, vector<int> reserve)
+{
+    for(int i=0;i<reserve.size(); i++)
+    {
+        for(int j=0;j<lost.size();j++)
+        {
+            if(reserve[i]==lost[i])
+            {
+                //가져온 친구 중 도난당한 친구가 있으면, 못 빌려줌.
+                reserve[i]=-10;
+                
+                //다른 가져온 친구 중 빌려주지 못하게 함.
+                lost[j]=-10;
+            }
+        }
+    }
+}
+
+int solution(int n, vector<int> lost, vector<int> reserve) {
+    int c[30]={0,};
+    sort(lost.begin(), lost.end());
+    sort(reserve.begin(), reserve.end());
+    
+    check(lost, reserve);
+    
+    int answer = n-lost.size();
+    
+    for(int i=0;i<reserve.size(); i++)
+    {
+        int a = reserve[i];
+        
+        if(a==-10){
+            answer+=1;
+            continue;
+        }
+            
+        for(int j=0;j<lost.size(); j++)
+        {
+            if(c[j]==0&&lost[j]==a-1)
+            {
+                c[j]=1;
+                answer+=1;
+                break;
+            }
+            if(c[j]==0&&lost[j]==a+1)
+            {
+                c[j]=1;
+                answer+=1;
+                break;
+            }
+        }
+    }
+    
+    return answer;
+}
