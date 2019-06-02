@@ -1,0 +1,25 @@
+vector<int> test = { 2, 5, 7 };
+	vector<int> test2 = { 2, 4, 5, 6, 7 };
+	for (int i = 0; i < test.size(); i++)
+	{
+		for (int j = 0; j < test2.size(); j++)
+		{
+			cout << test[i] << " " << test2[j] << endl;
+			if (test[i] == test2[j])
+			{
+				test.erase(test.begin() + i);
+				test2.erase(test2.begin() + j);
+        //값을 삭제한 후, 자동으로 뒤의 값들이 앞으로 당겨오기 때문에
+        //모든 숫자에 대해 확인을 하려면, i와 j값을 1씩 빼줘야 함.        
+				i--;
+				j--;
+				break;
+			}
+		}
+		/*cout << test[i] << endl;
+		if (test[i] % 2 != 0)
+		{
+			test.erase(test.begin() + i);
+			i--;
+		}*/
+	}
