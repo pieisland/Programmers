@@ -1,0 +1,39 @@
+#include <string>
+#include <vector>
+using namespace std;
+
+/*
+출처는 https://swjeong.tistory.com/73
+이 분 정말 잘 푸셨음...
+노드를 방문한다는 생각을 가지고 이어야 하는 듯 하다..
+
+언제쯤 이런 생각을 할 수 있나.
+*/
+
+int c[200] = { 0 };
+
+void dfs(int s, vector<vector<int>> computers, int n)
+{
+    c[s]=1;//방문했음
+    for(int i=0;i<n;i++)//노드의 연결상태 확인
+    {
+        if(!c[i]&&computers[s][i]){//방문하지 않았으며, 연결이 되어있다면
+            dfs(i, computers, n);//확인하러 간다.
+        }
+    }
+}
+
+int solution(int n, vector<vector<int>> computers) {
+	int ans=0;
+    
+    for(int i=0;i<n;i++)
+    {
+        if(!c[i])//방문하지 않았으면
+        {
+            ans++;//dfs 실행하며 방문된 노드에 대해 visit 처리가 되므로, 
+                    //첫 시작할 때 증가를 해줌.
+            dfs(i, computers, n);
+        }
+    }
+    return ans;
+}
