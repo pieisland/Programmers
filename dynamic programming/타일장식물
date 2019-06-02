@@ -1,0 +1,31 @@
+#include <string>
+#include <vector>
+
+using namespace std;
+
+long long int arr[1000];
+
+long long int fib(int a)
+{
+    if(a==1) 
+    {   
+        arr[1]=1;
+        return 1;
+    }
+    if(a==2){ 
+        arr[2]=1;
+        return 1;
+    }
+    if(arr[a]!=0) return arr[a];
+    return arr[a]=fib(a-1)+fib(a-2);
+}
+
+long long solution(int N) {
+    fib(N);
+    if(N==1) return 4;
+    if(N==2) return 6;
+    
+    //printf("%d %d\n", arr[N], arr[N-1]);
+    long long answer = 2*arr[N]+2*(arr[N-1]+arr[N]);
+    return answer;
+}
