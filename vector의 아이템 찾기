@@ -1,0 +1,2 @@
+if ( std::find(vector.begin(), vector.end(), item) != vector.end() )
+있으면 true, 없으면 false를 return.
