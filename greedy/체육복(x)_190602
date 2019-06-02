@@ -4,6 +4,12 @@
 
 using namespace std;
 
+/*
+테스트케이스만 맞음.. ㅠ.ㅠ;
+벡터 자체를 지우는 사람들이 많더라.
+그리고 벡터 지울 때, index 문제가 생기기 때문에 조심해야 함.
+*/
+
 void check(vector<int> lost, vector<int> reserve)
 {
     for(int i=0;i<reserve.size(); i++)
