@@ -1,0 +1,34 @@
+#include <string>
+#include <vector>
+
+using namespace std;
+/*
+19.07.04.목.
+*/
+
+int ans;
+
+void dfs(int idx, int n, vector<int> numbers, int tar)
+{
+    //모든 숫자에 대해서 연산을 했으며 타겟넘버라면 값 증가
+    if(idx==numbers.size()-1&&n==tar)
+        ans++;
+    else
+    {
+        //모든 숫자에 대해 다 했지만 타겟 넘버가 아니라면 중지
+        if(idx==numbers.size()-1&&n!=tar)
+            return;
+        
+        //다음 숫자가 양수인 경우, 음수인 경우로 다시 dfs
+        dfs(idx+1, n+numbers[idx+1], numbers, tar);
+        dfs(idx+1, n-numbers[idx+1], numbers, tar);
+    }
+}
+
+int solution(vector<int> numbers, int target) {
+    //첫 번쨰 수를 음수로 한 경우, 양수로 한 경우 각각으로 dfs
+    dfs(0, -numbers[0], numbers, target);
+    dfs(0, numbers[0], numbers, target);
+   
+    return ans;
+}
