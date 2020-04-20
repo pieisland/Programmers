@@ -1,0 +1,71 @@
+#include <string>
+#include <vector>
+#include <iostream>
+
+using namespace std;
+
+int solution(vector<int> budgets, int M) {
+    int answer = 0;
+    
+    //상한액을 return 해야되네.
+    int minVal = 987654321;
+    int maxVal = 0;
+    for(int i = 0; i < budgets.size(); i++){
+        if(budgets[i]<minVal) minVal = budgets[i];
+        if(budgets[i]>maxVal) maxVal = budgets[i];
+    }
+    
+    int myVal = (minVal + maxVal)/2;
+    int check=0;
+    
+    while(1){
+        cout<<minVal<<maxVal<<endl;
+        if(minVal>=maxVal){ 
+            check=1;
+            break;
+        }
+        myVal = (minVal + maxVal)/2;
+        long long sumVal =0;
+        for(int i=0;i<budgets.size();i++){
+            if(budgets[i]<myVal)
+                sumVal += budgets[i];
+            else
+                sumVal +=myVal;
+        }
+        if(sumVal>M) maxVal = myVal -1;
+        else if(sumVal<M) minVal = myVal+1;
+        else break;
+    }
+    
+    if(check==1){       
+        int minSum = 0;
+        int maxSum = 0;
+        for(int i=0;i<budgets.size();i++){
+            if(budgets[i]<minVal)
+                minSum += budgets[i];
+            else
+                minSum +=minVal;
+            
+            if(budgets[i]<maxVal)
+                maxSum += budgets[i];
+            else
+                maxSum +=maxVal;
+        }
+
+        int t1 = M-minSum;
+        int t2 = M-maxSum;
+        if(t1<0) answer = maxVal;
+        else if(t2<0) answer = minVal;
+        else{
+            if(t1<t2) answer = minVal;
+            else answer = maxVal;
+        }
+       // answer = maxVal;
+        //이걸 또 비교해봐야되나?? 그냥 maxVal이 정답 아니니..
+    }
+    else//얘는 딱맞는거니까 맞을 것 같고.
+        answer = myVal;
+    return answer;
+    
+    //return myVal;
+}
