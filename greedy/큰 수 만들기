@@ -1,0 +1,39 @@
+#include <string>
+#include <vector>
+
+using namespace std;
+
+/*
+200420
+그리디 너무 모르겠어서 다른 분꺼 봤다.
+그리디는 뭔가 생각을 잘 해야하는 문제같다.
+j에 대해서.. 4자리 만들어야 되면 3자리 수는 남겨두고
+그 중에서 제일 큰 값을 찾아야 한다는 거였는데.
+j가 갈 수 있는 인덱스가 너무 헷갈려서 슬펐다.
+실제 숫자를 대입해보는 게 그나마 가장 빠른 방법인 것 같다.
+
+string은 append를 할 수 있구나 라는 걸 알게됐다.
+*/
+
+string solution(string number, int k) {
+    string answer = "";
+    
+    int size = number.size();
+    int n = size - k;
+    int idx = -1;
+    int tmpidx;
+    int maxVal = -1;
+    for(int i=0;i<n;i++){
+        for(int j=idx+1;j<size-(n-i-1);j++){
+            if(maxVal < number[j]-'0'){
+                maxVal = number[j]-'0';
+                tmpidx = j;
+            }
+        }
+        idx = tmpidx;
+        answer.append(to_string(maxVal));
+        maxVal = -1;
+    }
+    
+    return answer;
+}
