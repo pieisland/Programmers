@@ -1,0 +1,39 @@
+#include <string>
+#include <vector>
+
+using namespace std;
+
+int ans;
+int size;
+
+void dfs(int pos, string s, int cnt, int k, string number)
+{
+    //모두 선택 완료한 경우
+    if(cnt==size-k)
+    {
+        //string을 숫자로 바꾸는 거 이거 맞는지는 모르겠네.
+        if(ans<atoi(s.c_str()))
+            ans=atoi(s.c_str());
+        return;
+    }
+    if(pos==size) //마지막 위치임
+        return;
+    
+    dfs(pos+1, s, cnt, k, number);
+    dfs(pos+1, s+number[pos], cnt+1, k, number);
+    
+    return;
+}
+
+string solution(string number, int k) {
+    string answer = "";
+    
+    size=number.size(); //전체 사이즈를 하는 걸로 하자.
+    string s="";//아무것도 없는 string
+    
+    dfs(0, s, 0, k, number);//0번째 위치를 봐줘, 
+    
+    answer=to_string(ans);
+    
+    return answer;
+}
