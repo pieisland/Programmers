@@ -1,0 +1,40 @@
+#include <string>
+#include <vector>
+#include <iostream>
+#include <algorithm>
+
+using namespace std;
+
+int solution(vector<int> budgets, int M) {
+    int answer = 0;
+    //솔직히 정렬할 필요 없지 않아?
+    sort(budgets.begin(), budgets.end());
+    int minVal = 0;
+    int maxVal = 0;
+    //왜 max를 여기서 안찾으면 문제가 생길까.
+    //min값도 0으로 해줘야됨.....
+    for(int i = 0; i < budgets.size(); i++){
+        //if(budgets[i]<minVal) minVal = budgets[i];
+        if(budgets[i]>maxVal) maxVal = budgets[i];
+    }
+    
+    int myVal = (minVal + maxVal)/2;
+    while(minVal<=maxVal){
+        myVal = (minVal + maxVal)/2;
+        
+        long long sumVal =0;
+        for(int i=0;i<budgets.size();i++){
+            if(budgets[i]<myVal)
+                sumVal += budgets[i];
+            else
+                sumVal +=myVal;
+        }
+        if(sumVal>M) maxVal = myVal -1;
+        else { //여기서 바로 넣어주네..
+            answer = myVal;
+            minVal = myVal+1;
+        }
+    }
+    
+    return answer;
+}
