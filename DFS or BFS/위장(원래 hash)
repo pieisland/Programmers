@@ -1,0 +1,59 @@
+#include <string>
+#include <vector>
+#include <iostream>
+using namespace std;
+
+vector<pair<string, int>> vec;
+
+int sel[30];
+
+int ans;
+
+void dfs(int start, int myCnt, int cnt){
+    if(myCnt==cnt){
+        int tmp = 1;
+        for(int i=0;i<vec.size();i++){
+            if(sel[i]==1){       
+                tmp *= vec[i].second;
+            }
+        }
+        ans += tmp;
+        //선택한 애들에 대해서 해야겠죠..        
+    }
+    
+    for(int i=start;i<vec.size();i++){
+        sel[i] = 1;
+        dfs(i+1, myCnt+1, cnt);
+        sel[i] = 0;
+    }
+}
+
+int solution(vector<vector<string>> clothes) {
+    int answer = 0;
+    ans =0;
+    for(int i=0;i<clothes.size(); i++){
+        int check = 0;
+        for(int j=0;j<vec.size();j++){
+            if(vec[j].first==clothes[i][1]){
+                check=1;
+                vec[j].second += 1;
+                break;
+            }
+        }
+        
+        if(check==0){
+            vec.push_back({clothes[i][1], 1});
+        }
+    }
+    
+    //제대로 넣은 걸 확인했어요.
+    for(int i=0;i<vec.size();i++){
+        //cout<<vec[i].first<<" "<<vec[i].second<<endl;
+        
+        dfs(0, 0, i+1);
+    }
+    
+    cout<<ans<<endl;
+    answer = ans;
+    return answer;
+}
