@@ -1,0 +1,51 @@
+#include <string>
+#include <vector>
+
+using namespace std;
+
+vector<long long> solution(long long k, vector<long long> room_number) {
+	vector<long long> answer;
+
+	//k는 방의 개수 10의 12승 까지 가능해서
+	//룸 넘버를 고객이 원하는 방 순서가 들어있다.
+
+	//이거를 일일이 확인하지 말라는 거잖아..?
+	//그리고 문제는 그거임
+  //너무 커서 메모리 초과에 시간초과 남. 정답은 나오는데 ㅋㅋㅋ..
+  //이걸 어떻게 처리하느냐가 문제임.. 이걸 다 할당하지 않고 어떻게 해 근데..???난 이해할 수가 없엉.
+  //니가 원하는 번호의 최대 크기 같은 걸 구해도 그만큼만 할당을 해도 된다는 건 아니지 않아?
+  //더 못 차는 곳이 있을 수가 있을텐데....
+  //아니면 그냥 제일 작은 곳이랑 제일 큰 곳음...
+	
+	//bool이면 별로 안 먹나..?
+	//int일 필요는 없다.. 그냥 개수가 존나 많을 뿐이지.
+	bool *arr = new bool[k+1];
+	for (long long i = 0; i < k; i++) {
+		arr[i] = true;
+	}
+	//초기화가 돼있나..? 모르겠어서 초기화함
+
+	for (long long i = 0; i < room_number.size(); i++) {
+		long long want = room_number[i];
+		if (arr[want]==true) {
+			//room_number[i];//이 값에 해당하는 배열에 아무것도 안 돼있으면
+			arr[want] = false;
+			answer.push_back(want);
+		}
+		else
+		{
+			//이미 배정이 되어있다면
+			for (long long j = want + 1; j < k; j++) {
+				if (arr[j] == true) {
+					//가능한 방을 찾았으면
+					//가능한 제일 큰 것만 찾았으면 됐지 뭐.
+					arr[j] = false;
+					answer.push_back(j);
+					break;
+				}
+			}
+		}
+	}
+
+	return answer;
+}
