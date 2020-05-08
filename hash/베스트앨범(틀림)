@@ -1,0 +1,52 @@
+#include <string>
+#include <vector>
+#include <map>
+#include <algorithm>
+
+using namespace std;
+
+bool cmp(pair<int, int> a, pair<int, int> b){
+    if(a.second>b.second){
+        return a>b;
+    }
+    else if(a.second==b.second){
+        if(a.first<b.first)
+            return a>b;
+        else return b>a;
+    }
+}
+
+vector<int> solution(vector<string> genres, vector<int> plays) {
+    vector<int> answer;
+    string str[2];
+    int maxVal=0;
+    
+    map<string, vector<pair<int, int>>> m;
+    for(int i=0;i<genres.size();i++){
+        m[genres[i]].push_back({i, plays[i]});
+    }
+    
+    for(auto it = m.begin(); it!=m.end();it++){
+        string s = it->first;
+        sort(m[s].begin(), m[s].end(), cmp);
+        
+        if(maxVal<m[s][0].second){
+            maxVal = m[s][0].second;
+            str[1] = str[0];
+            str[0] = s;
+        }
+    }
+    
+    for(int i=0;i<2;i++){
+        if(m[str[i]].size()==1){
+            answer.push_back(m[str[i]][0].first);
+        }
+        else{
+            for(int idx=0;idx<2;idx++){
+                 answer.push_back(m[str[i]][idx].first);
+            }
+        }
+    }
+    
+    return answer;
+}
