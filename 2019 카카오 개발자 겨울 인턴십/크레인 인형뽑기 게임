@@ -1,0 +1,65 @@
+#include <string>
+#include <vector>
+
+using namespace std;
+vector<int> basket;
+
+int bye() {
+	//basket을 확인한다.
+	//사실 위에서 보든 아래서 시작해서 보든 차이는 없음.
+	//그냥.. 전부다.. 서로 다르다는 걸 알 때까지만 확인하면 됨.
+	int ret = 0;
+
+	//이게 되나..?
+	while (1) {
+		bool cont = false;
+		for (int i = 0; i < basket.size()-1; i++) {
+			if (basket[i] == -1) continue;
+			for (int j = i + 1; j < basket.size(); j++) {
+				if (basket[j] == -1) continue;
+				if (basket[i] == basket[j]) {
+					//동일한 값이라면 터져야지.
+					ret += 2;
+					//터진 게 하나라도 있었으면
+					cont = true;
+					basket[i] = -1;
+					basket[j] = -1;
+
+					break;
+				}
+				else {
+					//-1이 아닌데 다른 값임
+					break;
+				}
+			}
+		}
+		//더이상 터질 게 없다는 의미..
+		if (cont == false) break;
+	}
+	//어차피 터져도 그렇게 밖에 안터진단말이야..?
+
+	return ret;
+}
+
+int solution(vector<vector<int>> board, vector<int> moves) {
+	int answer = 0;
+	
+	for (int i = 0; i < moves.size(); i++) {
+		int pos = moves[i] - 1;
+
+		int height = board.size();
+		for (int j = 0; j < height; j++) {
+			if (board[j][pos] != 0) {
+				basket.push_back(board[j][pos]);
+				board[j][pos] = 0;//값을 0으로 해주고 
+				break;
+			}
+		}
+	}
+	
+	//다 옮기고 나서 확인해도 될 것 같아서요.
+
+	answer = bye();
+
+	return answer;
+}
