@@ -1,0 +1,140 @@
+#include <string>
+#include <vector>
+#include <iostream>
+
+using namespace std;
+
+vector<int> whocan[8];
+//정답을 저장하고 있어야 되는데..
+
+int sel[8];
+int answer;
+
+vector<string> tmp;
+
+void tmpshow(){
+    cout<<"tmpshow"<<endl;
+    for(int i=0;i<tmp.size();i++){
+        cout<<tmp[i]<<endl;
+    }
+}
+
+void selshow(){
+    cout<<"selshow"<<endl;
+    for(int i=0;i<8;i++){
+        cout<<sel[i]<<" ";
+    }
+    cout<<endl;
+}
+
+void check() {
+  //  cout<<"check 함수 실행"<<endl;
+    
+	//sel의 상태랑 비굘르 하는거임 어차피 동일하게 그렇다고 해서.
+	if (tmp.size() == 0) {
+		string s;
+        for (int i = 0; i < 8; i++) {
+            s += to_string(sel[i]);
+        }
+        tmp.push_back(s);
+        answer++;
+		return;
+	}
+
+    //selshow();
+    //tmpshow();
+    
+	//bool c = true;
+	//지금까지 구한 값중에 있는지를 본다.
+	for (int i = 0; i < tmp.size(); i++) {
+		bool c = true;
+		int j = 0;
+		for (j = 0; j < 8; j++) {
+			//만약에 뭐.. 이거랑 그냥 다른 거면 
+			if (sel[j] != tmp[i][j] - '0')
+			{
+				break;
+			}
+		}
+		//이렇게 나왔는데 다 같아버린거지..
+		if (j == 8) {
+			//다 같은거면
+			//이미 구한 값이라서 못함
+			return;
+		}
+	}
+
+   /// cout<<"여기까지 못왔냐.."<<endl;
+    
+	//새로운 정답이라면
+	//맞으면 넣는 거임.
+	string s;
+	for (int i = 0; i < 8; i++) {
+		s += to_string(sel[i]);
+	}
+	tmp.push_back(s);
+	answer++;
+}
+
+//다음에 확인 할 애의 idx를 받았다..는 아닌데 ㅋㅋㅋ
+void func(int idx, int size) {
+	if (idx == size) {
+		//선택이 모두 완료됐다
+		check();//sel을 이미 만들어진 것과 확인합니다.
+		return;
+	}
+
+	//아니다.
+	for (int i = 0; i < whocan[idx].size(); i++) {
+		int val = whocan[idx][i];
+		if (sel[val] == 1) continue;
+		sel[val] = 1;
+		func(idx + 1, size);
+		sel[val] = 0;
+	}
+}
+
+int solution(vector<string> user_id, vector<string> banned_id) {
+	//int answer = 0;
+	
+	//모든 유저 아이디에 대해서
+	for (int i = 0; i < user_id.size(); i++) {
+		for (int j = 0; j < banned_id.size(); j++) {
+			int size1 = user_id[i].size();
+			int size2 = banned_id[j].size();
+			bool check = true;
+			if (size1 == size2) {
+				//어차피 길이가 같으니까 이걸 쓰겠음.
+				for (int k = 0; k < size1; k++) {
+					//일치하는 경우
+					//if (user_id[i][k] == banned_id[j][k] || banned_id[j][k] == '*') {
+					//	continue;
+					//}
+					if (banned_id[j][k] != '*' && user_id[i][k] != banned_id[j][k]) {
+						check = false;
+						break;
+					}
+				}
+				//whocan에는 bann 에 대해서 어떤 user _id를 만들 수 있는 지를 넣느거임
+				if (check == true) {
+					whocan[j].push_back(i);
+				}
+			}
+		}
+	}
+	
+	//그러면 whocan을 다 만들게 되는데
+	//여기서 이제 선택을 해야됨..
+	int size = banned_id.size();//얘 개수를 선택하는거니까.
+
+	for (int i = 0; i < whocan[0].size(); i++) {
+		int val = whocan[0][i];
+		sel[val] = 1;
+		func(1, size);
+		sel[val] = 0;
+	}
+
+    //cout<<"왜 이것도 안 보이는데..?"<<endl;
+    
+	return answer;
+}
