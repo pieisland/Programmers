@@ -1,0 +1,79 @@
+#include <string>
+#include <vector>
+#include <map>
+#include <algorithm>
+#include <iostream>
+
+using namespace std;
+
+vector<pair<string, int>> vec;
+
+void func(string s, int val){
+    for(int i=0;i<vec.size();i++){
+        if(vec[i].first == s){
+            vec[i].second += val;
+            return;
+        }
+    }
+    
+    vec.push_back({s, val});
+}
+
+bool cmp2(pair<string, int> a, pair<string, int> b){
+    return a.second>b.second;
+}
+
+bool cmp(pair<int, int> a, pair<int, int> b){
+    if(a.second>b.second){
+        return a>b;
+    }
+    else if(a.second==b.second){
+        if(a.first<b.first)
+            return a>b;
+        else return b>a;
+    }
+}
+
+vector<int> solution(vector<string> genres, vector<int> plays) {
+    vector<int> answer;
+    //string str[2];
+    int maxVal=0;
+    
+    map<string, vector<pair<int, int>>> m;
+    //map<string, int> m2;
+    
+    for(int i=0;i<genres.size();i++){
+        m[genres[i]].push_back({i, plays[i]});
+        func(genres[i], plays[i]);
+    }
+    
+    for(auto it = m.begin(); it!=m.end();it++){
+        string s = it->first;
+        sort(m[s].begin(), m[s].end(), cmp);
+        //sort(m2[s].begin(), m2[s].end(), cmp2);
+        /*if(maxVal<m[s][0].second){
+            maxVal = m[s][0].second;
+            str[1] = str[0];
+            str[0] = s;
+        }*/
+    }
+    
+    //sort(m2.begin(), m2.end(), cmp2);
+    //맵을 어떻게 정렬시키는데..?
+    sort(vec.begin(), vec.end(), cmp2);
+    
+    for(int i=0;i<vec.size();i++){
+        string s = vec[i].first;
+        cout<<s<<endl;
+        if(m[s].size()==1){
+            answer.push_back(m[s][0].first);
+        }
+        else{
+            for(int idx=0;idx<2;idx++){
+                 answer.push_back(m[s][idx].first);
+            }
+        }
+    }
+    
+    return answer;
+}
