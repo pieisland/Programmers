@@ -1,0 +1,93 @@
+#include <string>
+#include <vector>
+#include <iostream>
+
+using namespace std;
+
+bool isRight(string s){
+    int val =0;
+    int idx =0;
+    for(int i=0;i<s.size();i++){
+        if(s[i]=='(') val +=1;
+        else if(s[i]==')') val -=1;
+        if(val==0) idx = i;
+        if(val<0) break;
+    }
+    if(idx==s.size()-1) return true;
+    else return false;
+}
+
+int findBalance(string s){
+    cout<<"findBal s:"<<s<<endl;
+    
+    int val;
+    int idx =0;
+    if(s[0]=='(') val = 1;
+    else if(s[0]==')') val = -1;
+    
+    for(int i=1;i<s.size();i++){
+        if(s[i]=='(') val +=1;
+        else if(s[i]==')') val -=1;
+        //처음으로 나타나는 밸런스를 찾은 거임..
+        
+        if(val == 0){
+            idx = i;
+            break;
+        }
+        if(idx!=0 && val<0) break;
+    }
+    return idx;
+}
+
+string reverseStr(string s)
+{
+    string answer = s.substr(1, s.size()-2);
+    for(int i=0;i<answer.size();i++){
+        if(answer[i] =='(') answer[i] = ')';
+        else answer[i] = '(';
+    }
+    return answer;
+}
+
+string func(string s){
+    string answer = "";
+    
+    cout<<"s값은 "<<s<<endl;
+    if(s=="") return answer;
+    
+    if(isRight(s)){
+        return s;
+    }
+    else{
+        int idx = findBalance(s);
+        cout<<"찾은 idx값:"<<idx<<endl;
+        
+        string u = s.substr(0, idx+1);
+        string v = s.substr(idx+1, s.size() - (idx+1));
+        //제대로 되는지를 봐야됨.
+        cout<<"u: "<<u<<endl;
+        cout<<"v: "<<v<<endl; 
+        
+        v = func(v);
+        if(isRight(u)){
+            answer = u +v;
+        }
+        else {
+            answer  = "(";
+            answer += v;
+            answer += ")";
+            answer += reverseStr(u);
+        }
+    }
+    
+    cout<<"func의 answer : "<<answer<<endl;
+    return answer;
+}
+
+string solution(string p) {
+    string answer = "";
+    
+    answer = func(p);
+    
+    return answer;
+}
