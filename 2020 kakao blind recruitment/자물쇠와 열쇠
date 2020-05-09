@@ -1,0 +1,134 @@
+#include <string>
+#include <vector>
+#include <iostream>
+
+using namespace std;
+
+/*
+20200509
+시계방향, 반시계방향
+회전하는 거 다시 연습할 수 있었던 문제.
+이게 누적되면 안되는거구나. 조심해야됨..
+
+그리고 자물쇠.. 흐..
+꽂을 수 있는 곳의 개수와 더해서 1이 되는 개수가 같으면서
+모든 구멍을 다 메워야 맞는거다.
+*/
+
+vector<vector<int>> clockWise(int r, vector<vector<int>> key) {
+	vector<vector<int>> ret = key;
+
+	int n = key.size();
+	for (int rot = 0; rot<r; rot++) {
+		vector<vector<int>> tmp = ret;
+
+		for (int i = 0; i<n; i++) {
+			for (int j = 0; j<n; j++) {
+				tmp[i][j] = ret[n - 1 - j][i];
+			}
+		}
+		ret = tmp;
+
+	}
+
+	return ret;
+}
+
+vector<vector<int>> counterClockWise(int r, vector<vector<int>> key) {
+	vector<vector<int>> ret = key;
+
+	int n = key.size();
+	for (int rot = 0; rot<r; rot++) {
+		vector<vector<int>> tmp = ret;
+		for (int i = 0; i<n; i++) {
+			for (int j = 0; j<n; j++) {
+				tmp[i][j] = ret[j][n - 1 - i];
+			}
+		}
+		ret = tmp;
+	}
+	return ret;
+}
+
+vector<vector<int>> rotate(int r, vector<vector<int>> key) {
+	vector<vector<int>> ret;
+
+	if (r == 0) return key;
+	else
+	{
+		if (r>0 && r<4) {
+			ret = clockWise(r, key);
+		}
+		else if (r >= 4 && r<7) {
+			ret = counterClockWise(r-3, key);
+		}
+	}
+
+	return ret;
+}
+
+bool isinside(int y, int x, int n)
+{
+	if (y >= 0 && y < n && x >= 0 && x < n) return true;
+	else return false;
+}
+
+bool solution(vector<vector<int>> key, vector<vector<int>> lock) {
+	bool answer = true;
+	int m = key.size();
+	int n = lock.size();
+
+    int hole = 0;
+    for(int i=0;i<n;i++){
+        for(int j=0;j<n;j++){
+            if(lock[i][j]==0) hole++;
+        }
+    }
+    
+	for (int r = 0; r<7; r++) {
+		vector<vector<int>> newKey = rotate(r, key);
+        
+		/*cout << r << endl;
+		cout << "new key" << endl;
+		for (int i = 0; i<key.size(); i++) {
+			for (int j = 0; j<key.size(); j++) {
+				cout << newKey[i][j] << " ";
+
+			}
+			cout << endl;
+		}*/
+		//일단 회전은 제대로 시킴 ㅇ
+		for (int a = 1-m; a < n; a++) {
+			for (int b = 1 - m; b < n; b++) {
+				//int check1 = 0;
+				int check = 0;
+				int c1=0;
+        int c2 =0;
+        for (int i = 0; i < m; i++) {
+					for (int j = 0; j < m; j++) {
+						if (!isinside(a + i, b + j, n)) {
+							continue;
+						}
+						//check1++;//연산 가능한 곳
+						c1++;
+                        if (lock[a + i][b + j]+ newKey[i][j] == 1){
+                            c2++;
+                        }
+                        if (lock[a + i][b + j]==0 && newKey[i][j] == 1) {
+							check++;
+						}
+                        
+					}
+				}
+				//가능한 곳 모두 확인
+				if (hole == check && c1 == c2) {
+                    //cout<<check1<<" "<<check2<<endl;
+                    //cout<<r<<" "<<a<<" "<<b<<endl;
+					return true;
+				}
+			}
+		}
+	}
+
+	return false;
+}
