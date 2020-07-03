@@ -1,0 +1,48 @@
+#include <iostream>
+#include<vector>
+using namespace std;
+
+int solution(vector<vector<int>> board)
+{
+	int answer = 0;
+
+	for (int i = 0; i < board.size(); i++) {
+		for (int j = 0; j < board[i].size(); j++) {
+			if (board[i][j] == 1) {
+				int posy = i;
+				int posx = j;
+				for (int a = i + 1; a < board.size(); a++) {
+					if (board[a][j] != 1) {
+						break;
+					}
+					posy = a;
+				}
+				for (int a = j + 1; a < board[i].size(); a++) {
+					if (board[i][a] != 1) {
+						break;
+					}
+					posx = a;
+				}
+
+				//여기서 찾으면 되는건가.
+				//그 안이 모두 1이어야 되는데..
+				int size = posy - i + 1 < posx - j + 1 ? posy - i + 1 : posx - j + 1;
+				///더 작은 걸 찾아야 됩니다.
+				bool check = true;
+				for (int a = i; a < i + size; a++) {
+					for (int b = j; b < j + size; b++) {
+						if (board[a][b] == 0) {
+							check = false;
+							break;
+						}
+					}
+				}
+				if (check) {
+					if (size*size > answer) answer = size*size;
+				}
+			}
+		}
+	}
+
+	return answer;
+}
