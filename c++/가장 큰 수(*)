@@ -1,0 +1,47 @@
+#include <string>
+#include <vector>
+#include <algorithm>
+
+using namespace std;
+
+/*
+200703
+네 자리를 만드는 게 제일 중요하더라.
+그것도 원래 자기 수를 반복해서.
+그리고 0에 대한 처리까지.
+*/
+
+//앞에 두려는 애를 크게 해야되는거야...?
+bool cmp(pair<string, int> a, pair<string, int> b) {
+	if (stoi(a.first) > stoi(b.first))
+		return a > b;
+}
+
+string solution(vector<int> numbers) {
+	string answer = "";
+
+	vector<pair<string, int>> vec;
+	for (int i = 0; i < numbers.size(); i++) {
+		string tmp = to_string(numbers[i]);
+
+		while (1) {
+			if (tmp.size() >= 4) break;
+
+			tmp += tmp;
+		}
+		tmp =tmp.substr(0, 4);
+        
+		vec.push_back({ tmp, numbers[i] });
+	}
+
+	sort(vec.begin(), vec.end(), cmp);
+
+	for (int i = 0; i < vec.size(); i++)
+		answer += to_string(vec[i].second);
+
+    //int ttmp = stoi(answer);
+    //answer = to_string(ttmp);
+    if(answer[0]=='0') answer = "0";
+    
+	return answer;
+}
