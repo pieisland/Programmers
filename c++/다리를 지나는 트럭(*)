@@ -1,0 +1,61 @@
+#include <string>
+#include <vector>
+#include <queue>
+
+using namespace std;
+
+/*
+뭔가 굉장히 복잡한 느낌이라 혼자 풀지 못했다.
+.. 눈물 나네.
+vector를 erase를 사용해서 원하는 위치를 지울 수 있다는 걸 알게됐다.
+insert도 원하는 위치에 넣을 수 있는 애라고 한다.
+항상 push, pop만 써서 몰랐는데 이 문제 자체가 좀 앞에 있는 거를
+빼내야 하는 건데 주어진 자료구조가 vector이다보니
+이렇게 푸신 것 같다.
+
+근데 이거 진짜. 항상 느끼는 거지만.
+이런 류의 문제는 언제 값을 증가시키고 감소시키느냐가 중요한 문제다.
+판단하기가 너무 헷갈린다.. 죽을 것 같음.
+*/
+
+int solution(int bridge_length, int weight, vector<int> truck_weights) {
+    int answer = 0;
+    
+    int myweight=0;
+    
+    queue<int> oncar, remainDist;
+    
+    while(true){
+        int size = oncar.size();
+        //현재 다리에 올라와있는 모든 애들에 대해서 검사하자.
+        for(int i=0;i<size;i++){
+            int len = remainDist.front();
+            remainDist.pop();
+            
+            if(len<=1){ //길이가 1 남아서 지금 건너면 다 건너는 거라면 무게에서 제외한다.
+                myweight-=oncar.front();
+                oncar.pop();
+                continue;
+            }
+            remainDist.push(len-1); //아니면 1 감소하고 넣어주는거고.
+            //모든 애들에 대해서 뻈다가 넣었다가 하기 때문에 순서가 바뀌지는 않는다.
+        }
+        
+        //위에서 다리에서 내려온 애가 있을 수 있으니 더 들어갈 수 있나 확인하기.
+        if(truck_weights.size()>0 && myweight+truck_weights[0]<=weight)
+        {
+            oncar.push(truck_weights[0]);
+            myweight+=truck_weights[0];
+            remainDist.push(bridge_length);
+            truck_weights.erase(truck_weights.begin());
+            //erase를 사용하기 때문에 계속 벡터의 첫번째 원소를 넣는것이다.
+            //그리고 거리는 처음엔 항상 다리 길이 넣어주고.
+        }
+        answer++;//시간이 경과한다.
+        
+        //종료 조건.
+        if(truck_weights.size()==0 && oncar.size()==0) break;
+    }
+    
+    return answer;
+}
