@@ -1,0 +1,40 @@
+#include <string>
+#include <vector>
+#include <iostream>
+
+using namespace std;
+
+int numsize;
+int ans;
+int sel[100000];
+
+void dfs(string s, int cnt, vector<int> numbers)
+{
+    if(cnt==numsize)
+    {
+        int tmp= atoi(s.c_str());
+        if (tmp>ans) ans=tmp;
+        return;
+    }
+    
+    for(int i=0;i<numsize;i++)
+    {
+        if(sel[i]==1) continue;
+        sel[i]=1;
+        string tmp=to_string(numbers[i]);
+        dfs(s+tmp, cnt+1, numbers);
+        sel[i]=0;
+    }
+    
+    return;
+}
+
+string solution(vector<int> numbers) {
+    numsize = numbers.size();
+    
+    string t;
+    dfs(t, 0, numbers);
+    
+    string answer = to_string(ans);
+    return answer;
+}
