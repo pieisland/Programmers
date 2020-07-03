@@ -1,0 +1,42 @@
+#include <iostream>
+#include<vector>
+using namespace std;
+
+/*
+200703
+이게 dp 문제라니.. 정말 ㅎㅎㅎ..
+나는 참 헛웃음이 나왔다.
+dp인 거를 감도 못 잡는 내 모습에 헛웃음이 나오는 거지.
+*/
+
+int solution(vector<vector<int>> board)
+{
+	int answer = 0;
+
+    if(board[0][0]==1) answer = 1;
+    
+    //for문을 1부터 볼거면 00에 대한 처리를 해줘야 한다.
+	for (int i = 1; i < board.size(); i++) {
+		for (int j = 1; j < board[i].size(); j++) {
+			if (board[i][j] > 0) {
+				int v1 = board[i - 1][j];
+				int v2 = board[i][j - 1];
+				int v3 = board[i - 1][j - 1];
+				int minval;
+				if (v1 < v2) minval = v1;
+				else minval = v2;
+				if (v3 < minval) minval = v3;
+
+        //괄호에 안 넣어도 맞기는 해요.
+				if (minval!=0) {
+          board[i][j] = minval + 1;
+				  if (minval + 1 > answer) 
+          answer = minval + 1;
+        }
+			}
+		}
+	}
+
+  answer = answer*answer;
+	return answer;
+}
