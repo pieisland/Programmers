@@ -1,0 +1,40 @@
+#include <string>
+#include <vector>
+
+using namespace std;
+
+//200703
+
+int solution(string skill, vector<string> skill_trees) {
+	int answer = 0;
+	int check[26] = { 0, };
+
+	for (int i = 0; i < skill.size(); i++) {
+		int ch = skill[i] - 'A';
+		check[ch] = i + 1;
+	}
+	//선행 스킬 저장함. 어차피 중복 안되니까 우선순위랑 저장해도 될 듯
+
+	for (int i = 0; i < skill_trees.size(); i++) {
+		int idx = 1;
+		bool isans = true;
+		for (int j = 0; j<skill_trees[i].size(); j++) {
+			int tmp = skill_trees[i][j] - 'A';
+			if (check[tmp] != 0) {
+				//skill에 포함된 거라면
+				if (check[tmp] == idx) {
+					//맞는건데.
+					idx++;
+					continue;
+				}
+				else {
+					isans = false;
+					break;
+				}
+			}
+		}
+		if (isans) answer++;
+	}
+
+	return answer;
+}
