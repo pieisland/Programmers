@@ -1,0 +1,37 @@
+#include <string>
+#include <vector>
+#include <algorithm>
+
+using namespace std;
+
+string solution(string s) {
+	string answer = "";
+
+	vector<int> nums;
+
+	//일단 숫자를 다 꺼내야되잖아.
+	int idx = 0;
+	int l = -1, r;
+	while (1) {
+
+		if (idx == s.size()) break;
+
+		if (l == -1 && (s[idx] == '-' || (s[idx] >= '0' && s[idx] <= '9'))) {
+			l = idx;
+		}
+		else if (s[idx] == ' ') {
+			r = idx;
+			nums.push_back(stoi(s.substr(l, r - l)));
+			l = -1;
+		}
+
+		idx++;
+	}
+	nums.push_back(stoi(s.substr(l)));
+
+	sort(nums.begin(), nums.end());
+
+	answer = to_string(nums[0]) + " " + to_string(nums[nums.size() - 1]);
+
+	return answer;
+}
