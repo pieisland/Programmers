@@ -1,0 +1,35 @@
+#include <string>
+#include <vector>
+#include <queue>
+#include <iostream>
+using namespace std;
+
+int solution(vector<int> scoville, int K) {
+    int answer = 0;
+    priority_queue<int> pq;
+    for (int i = 0; i < scoville.size(); i++)
+        pq.push(-scoville[i]);
+    while (pq.size() > 1) {
+        int first = -pq.top();
+        if (first >= K)
+            return answer;
+        pq.pop();
+        answer++;
+        int second = -pq.top() * 2;
+        pq.pop();
+        int ret = first+second;
+        pq.push(-ret);
+    }
+    
+    //저 while문은 1보다 클 때만 확인을 하도록 짰으니까
+    //1일 때를 마지막으로 확인해줘야겠지.
+    if(pq.size()==1){
+        if(-pq.top() >= K){
+            return answer;
+        }
+    }
+    
+    cout<<answer<<endl;
+    
+    return -1;
+}
