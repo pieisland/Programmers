@@ -1,0 +1,52 @@
+#include <string>
+#include <vector>
+
+/*
+200704
+이 문제에서 배울 수 있었던 것은
+3진법이라는 거랑...(솔직히 2진법이랑 너무 다르게 동작되니까 이해가 잘 안됩니다.
+0일 때 1을 빼줘야 한다는게.. 다른 진법이랑 비교해도 그렇고 얘는 왜이래)
+string에 insert를 해서 맨 앞에 넣는 것.
+
+3진법은 문제 자체에 대한거니까 string insert에 대한 거를 좀 정리해보자면
+string.insert(넣을 위치, 넣을 값)
+이런 식으로 간단하게 쓸 수 있습니다.
+새로운 값을 그 위치에 넣으면 원래 있던 애들이 뒤로 밀려나겠죠.
+인수가 2개 말고 3개도 있었던 것 같은데.. 제대로 안봤음.
+
+항상 뒤에 추가하는 것만 해봤었는데 맨 앞에 추가해봤습니다.
+*/
+
+using namespace std;
+
+int change[3] = { 4, 1, 2 };
+
+string solution(int n) {
+	string answer = "";
+
+	//vector<int> tmp;
+
+	int num = n;
+	int mm, nn;
+	while (1) {
+		if (num == 0) break;
+
+		mm = num / 3;
+		nn = num % 3;
+
+		//몫과 나머지에서
+		if (nn == 0) {
+			num = mm - 1;
+		}
+        else num = mm;
+
+		//이렇게 하면 맨 앞에 들어가겠죠.
+		//tmp.insert(tmp.begin(), change[nn]);
+
+		//나머지만 더해간다
+        answer.insert(0, to_string(change[nn]));
+
+	}
+
+	return answer;
+}
