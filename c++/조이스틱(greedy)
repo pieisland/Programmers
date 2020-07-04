@@ -1,0 +1,97 @@
+#include <string>
+#include <vector>
+#include <iostream>
+using namespace std;
+
+/*
+200704
+그리디 문제는 정말 이해를 못하겠던데
+이런 류의 문제였구나.
+
+조이스틱 문제는 뭐.. 알파벳을 바꾸는 거야 작은 이동횟수를 찾아서
+더해주면 되는 거지만
+어느 방향으로 움직여야 되는가를 판별을 할 때
+신경을 써야하는 문제다.
+
+이걸 찾을 때 현 상태에서 가장 적게 움직여서
+A가 아닌 값을 찾는 방향으로 계속 움직여 가는 거라고 한다.
+
+그래서 왼쪽 이동, 오른쪽 이동 해가면서 얼마나 움직이는지를 저장하고
+덜 움직이는 쪽을 고르고 값을 더하고
+바꿨다는 표시를 주기 위해 check값도 바꾸고
+개수도 감소하고 했음.
+*/
+
+int solution(string name) {
+	int answer = 0;
+	int n = name.size();
+
+	//확인 한 놈이면 1을 주고 A 값이면 -1을 주자.
+	int check[20] = { 0, };
+	int chcnt = 0; //A값이 아니라서 바꿔야 되는 애의 개수를 저장해둔다.
+	for (int i = 0; i < name.size(); i++) {
+		if (name[i] == 'A') check[i] = -1;
+		else chcnt++;
+		int cnt = name[i] - 'A';
+		int cnt2 = 'Z' - name[i] + 1;
+		int val = cnt<cnt2 ? cnt : cnt2;
+
+		//더하는 건 val 값이긴 한데 이제 이걸 어떻게 움직이냐가 문제임.
+		answer += val;
+	}
+
+	//가장 가까운 a가 아닌 애를 찾는거래요.
+	int idx = 0;
+	//그리고 이미 바꿨으면 또 보는 게 아닌거겠죠.
+	//갔다는 정보고 가지고 있어야 할 거 아니냐.
+	//맨 처음 놈은 그냥 바꾸면 됩니다.
+  //가 아니라 맨 처음도 A가 아니면 바꿔야겠지.
+	if(chcnt!=0) //전부 다 A라면 당연 볼 필요가 없습니다.
+    while (1) {
+		if(check[idx]!=-1){ //사실 맨 처음 놈 때문에 이렇게 해둔것.
+        check[idx] = 1;
+    		chcnt -= 1;
+    }
+            
+		if (chcnt == 0) break;
+
+		int left = 0;
+		int right = 0;
+		int idx1 = idx;
+		int idx2 = idx;
+		//왼쪽에서 찾기
+    while (1) {
+			left++;
+			idx1--;
+			if (idx1<0) idx1 = n - 1;
+			if (check[idx1] == 0) {
+				//바꿔야 되는 놈인데 멈추고 횟수를 세야지.
+				break;
+			}
+		}
+
+    //오른쪽에서 찾기
+		while (1) {
+			right++;
+			idx2++;
+			if (idx2 > n - 1) idx2 = 0;
+			if (check[idx2] == 0) {
+				//바꿔야 되는 놈인데 멈추고 횟수를 세야지.
+				break;
+			}
+		}
+
+		if (left<right) {
+			idx = idx1;
+			answer += left;
+		}
+		else {
+			idx = idx2;
+			answer += right;
+		}
+	}
+
+	//서로 새로운 거를 찾은 건데
+
+	return answer;
+}
