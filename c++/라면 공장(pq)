@@ -1,0 +1,73 @@
+#include <string>
+#include <vector>
+#include <queue>
+#include <functional>
+
+using namespace std;
+
+/*
+200704
+이 문제는 priority queue를 이용해서 푼다.
+pq를 사용해본 적도 없었기 때문에...;
+참 난감했음.
+그래서 결국 이것도 내가 푼 게 아니다.
+
+일단 pq 같은 경우에는 템플릿 구조가 다음과 같다.
+<내용 구조, 큐 구조, 정렬>
+priority_queue<int, vector<int>,less<int>> tmp;
+뒤에 less 쓰려면 functional을 include해야된다.
+이런 건 또 처음인데..
+
+less는 내림차순으로 되는 것 같고. 그래서 제일 큰 수를 맨 앞으로
+가져올 수 있도록 해주는 듯 하다.
+
+실제 사용할 때 top이나 pop 같은 건 일반 queue랑 같은 것 같다.
+문제 없이 그냥 쓰면 되는 것 같고.
+
+문제로 돌아가서 이 문제는 해외 공장에서 가장 적게 지원을 받으려면 
+몇 번을 받아야 하는지에 대한 문제이다.
+재고가 다 떨어졌을 때 어떤 날에 받는 게 더 이득이다 이런 걸 
+경우의 수를 따져가며 하는 게 아니라
+일단 받는 날에는 다 받아놓고
+받아놓은 것 중에서 가장 많은 양을 주는 거를
+그 때 받았다고 계산하는. 그렇게 푸는 문제라고 한다.
+... 정말 내가 이런 걸 혼자 생각할 수 있는걸까.
+난 또 무슨 경우의 수 따져가지고 이 날 받고 안 받고 
+이렇게 해서 그 중에서 문제 없이 다 할 수 있는 날 찾는건 줄 알았더니
+이렇게 푼다고...?
+
+도대체 나는 모르는 게 얼마나 많은건지 참 답답하다.
+*/
+
+int solution(int stock, vector<int> dates, vector<int> supplies, int k) {
+	int answer = 0;
+
+	priority_queue<int, vector<int>, less<int>> tmp;
+	int j = 0;
+	for (int i = 0; i < k; i++) {
+		if (dates[j] == i) {
+			//물품 받는 날이라면
+			tmp.push(supplies[j]);
+			//필요할 때 받는 게 아니라 받는 날이면 일단 받고
+			//다 떨어졌을 때 제일 많이 주는 거 받는 식이야.
+			if (j != supplies.size() - 1) {
+				j++;
+				//다 받은 거 아니면 계속 증가해줍니다.
+			}
+		}
+			if (stock == 0) {
+				//재고가 다 떨어졌다면 
+				stock += tmp.top();//제일 많은 거 받는다.
+				tmp.pop();
+				answer++;
+			}
+			//솔직히 얘를 어디 쓰냐가 참 중요한 걸로 알고 있다.
+			//이거를 맨 뒤에 쓸 때랑 아래에 쓸 떄랑 다르겠지.
+			//매우 짜증나는 놈 중 하나임.
+            //시작하는 날에 재고가 다 떨어져도 새벽에 받는 거라서
+            //받고 처리한 후에 감소하는 거라고 생각하면 됨.
+			stock--;//재고 감소..
+		}
+
+	return answer;
+}
