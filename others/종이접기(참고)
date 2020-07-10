@@ -1,0 +1,31 @@
+#include <string>
+#include <vector>
+#include <math.h>
+#include <iostream>
+
+using namespace std;
+
+vector<int> solution(int n) {
+    vector<int> answer;
+    
+    for(int i=0;i<n;i++){
+        //answer.push_back()
+        //이전에 만든 answer를 갖다 붙인다
+        //0을 넣는다.
+        //answer의 사이즈만큼 뒤집어서 한다.
+        if(i==0) answer.push_back(0);
+        else{
+            answer.push_back(0);
+            //뒤집어서 더 더해줌..
+            int size = answer.size()-2;
+            for(int i=size; i>=0; i--){
+                int val = answer[i];
+                if(val ==0) val =1;
+                else val =0;
+                answer.push_back(val);
+            }
+        }
+    }
+    
+    return answer;
+}
