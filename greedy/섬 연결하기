@@ -1,0 +1,65 @@
+#include <string>
+#include <vector>
+#include <algorithm>
+#include <iostream>
+
+using namespace std;
+
+/*
+200711
+크루스칼!
+unionParent함수에서 중요한 건
+현재 내 노드 부모륿 바꾸는 게 아니라 
+내 부모의 부모를 바꾸는 겁니다.
+*/
+
+bool cmp(vector<int> c1, vector<int> c2){
+    return c1[2]<c2[2];
+}
+
+int getParent(int p[], int a){
+    if(p[a] ==a) return p[a];
+    return p[a]=getParent(p, p[a]);
+}
+
+void unionParent(int p[], int a, int b){
+    int p1 = getParent(p, a);
+    int p2 = getParent(p, b);
+    
+    cout<<a<<"부모:"<<p1<<endl;
+    cout<<b<<"부모:"<<p2<<endl;
+    
+    //이것때문에 틀린 거였구나.
+    //내 부모를 바꾸는 게 아니라 지금 내 부모라고 돼있는 애의 부모를
+    //바꾸는 거였다.
+    if(p1<p2) p[p2] = p1;
+    else p[p1] = p2;
+}
+
+int find(int p[], int a, int b){
+    int p1 = getParent(p, a);
+    int p2 = getParent(p, b);
+    if(p1==p2) return 1;
+    else return 0;
+}
+
+int solution(int n, vector<vector<int>> costs) {
+    int answer = 0;
+    int p[100];
+    
+    sort(costs.begin(), costs.end(), cmp);
+
+    //부모 설정
+    for(int i=0;i<n;i++){
+        p[i] = i;
+    }    
+
+    for(int i=0;i<costs.size();i++){
+        if(!find(p, costs[i][0], costs[i][1])){
+            answer +=costs[i][2];
+            unionParent(p, costs[i][0], costs[i][1]);
+        }
+    }
+    
+    return answer;
+}
