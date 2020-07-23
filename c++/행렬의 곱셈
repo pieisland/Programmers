@@ -1,0 +1,27 @@
+#include <string>
+#include <vector>
+#include <iostream>
+
+using namespace std;
+
+//200723. 별문제도 아닌데 시간 오래걸려서 화나네.
+
+vector<vector<int>> solution(vector<vector<int>> arr1, vector<vector<int>> arr2) {
+    vector<vector<int>> answer;
+    
+    for(int i=0;i<arr1.size();i++){
+        vector<int> tmp;
+        for(int k=0;k<arr2[0].size();k++){
+            int val =0;
+            for(int j=0;j<arr1[0].size();j++){
+                val+= arr1[i][j] * arr2[j][k];
+               
+            }
+            tmp.push_back(val);
+        }
+        answer.push_back(tmp);
+    }
+    
+    
+    return answer;
+}
