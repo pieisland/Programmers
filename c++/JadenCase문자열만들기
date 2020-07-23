@@ -1,0 +1,55 @@
+#include <string>
+#include <vector>
+
+using namespace std;
+
+//200723. 문자열 문제.
+
+string solution(string s) {
+    string answer = "";
+    
+    answer = s;
+    
+    /*
+    과정을 잠깐 적어본다고 한다면..
+    1. 공백이 아닌 애를 찾아요. start라고 하고요
+    2. 그 놈부터 공백인 애를 찾아요.
+    3. 그러면 start에서 end 까지가 단어가 됩니다.
+    4. 이 때 start의 값이 소문자이면 대문자로 바꿔주고
+    5. start+1부터 end까지가면서 대문자이면 소문자로 바꿔줍니다.
+    */
+    
+    for(int i=0;i<s.size();i++){
+        if(s[i]!=' '){
+            //문자의 시작이다.
+            int end = -1;
+            for(int j=i+1;j<s.size();j++){
+                if(s[j]==' '){
+                    end=j-1;
+                    break;
+                }
+            }
+            if(end==-1)
+                end = s.size()-1;
+
+            if(s[i]>='a' && s[i]<='z')
+            {
+                  //소문자라면 대문자로 변경해준다.
+                   //A는 65 a는 97이므로 32를 빼줘야겠다.
+                 answer[i] = s[i] -32;
+            }
+            for(int a=i+1;a<=end;a++){
+                //대문자를 소문자로 바꿔준다.
+                //아스키코드로 잘 동작하려나?
+                if(65<=s[a] && s[a]<=90)
+                    answer[a] = s[a] + 32;
+                //여기가 한 단어이다.
+                //마지막에 i를 end 더해주는 그런게 필요함..
+            }
+
+            i = end+1;
+        }
+    }
+    
+    return answer;
+}
