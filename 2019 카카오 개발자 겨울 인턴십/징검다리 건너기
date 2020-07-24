@@ -1,0 +1,96 @@
+#include <string>
+#include <vector>
+
+using namespace std;
+#define MAX 200000000
+int maxval;
+
+
+/*200724
+내 힘으로 푼 문제는 아니다.
+점점 혼자 풀 수 있는 문제가 적어지는 것 같음....
+이런 문제가 binary search로 풀 수 있다는 걸
+어떻게 아는건지 이해를 할 수가 없다...
+
+사실 이진탐색으로 풀어야 돼!
+라고 누가 말해줬어도 혼자 풀기엔 역부족이었겠지.
+
+단순 시뮬레이션 정도만 생각나지
+알고리즘적 사고는 별로.. ㅋㅋㅋ 없다..
+
+아무튼 이 문제를 풀면서 다시 한 번
+이진탐색에 대해 공부를 하는 기회라고 본다면..
+
+이 문제의 경우 완벽한 하나의 정답을 딱 찾아간다기 보다는
+찾으면서 값을 계속 갱신하고
+마지막으로 갱신된 값이 정답이 되는 구조.
+
+check함수는 m번째 사람이 건너갈 수 있는지 없는지를 확인하는 함수다.
+그래서 m-1번째 사람까지 다 건넜다고 가정을 하고
+m-1을 돌다리 수에서 빼면서 보는데
+0이하인 값이 연속적으로 k개 이상이 나오면
+m번째 사람은 못건넌다고 판단을 하고 return false를 해버린다.
+
+이렇게 푸는게 너무 신기한게 
+m-1번째 사람이 건넜다고 가정을 한다는 그런것도 신기하고..
+그걸 빼보면서 확인을 하는것도..
+음수 나오면 사실 의미없는 거 아닌가 싶은데
+그냥 내 머리로는 혼자 할 수 없는 문제가 아닐까.
+
+...;
+
+check 값의 유무에 따라서 이진탐색을 더 큰 수로 돌릴지
+더 작은 수로 돌릴지 판단하며 값을 갱신해나간다.
+*/
+
+
+bool check(vector<int> stones, int k, int m) {
+	//연속을 이렇게 쉽게 표현할 수가 있구나..
+	//하하핳..
+	
+	int size = stones.size();
+	int cnt = 0;
+	
+	//m-1번째까지 건널 수 있는건지를 보는 거 아니야..?
+	for (int i = 0; i < size; i++) {
+		if (stones[i] - (m - 1) <= 0) {
+			cnt++;
+			//0 이하가 연속으로 k번이면 건널 수 없다.
+			if (cnt == k) return false;
+		}
+		else {
+			//연속이 아니면 초기화하기.
+			cnt = 0;
+		}
+	}
+	return true;
+}
+
+void binarySearch(vector<int> stones, int k, int left, int right) {
+	if(left > right) return;
+
+	int mid = (left + right) / 2;
+	//mid번째 친구가 건널 수 있는지 아닌지를 체크한다.
+	bool res = check(stones, k, mid);
+
+	if (res) {
+		if (maxval < mid) maxval = mid;
+
+		//건널 수 있으면 mid보다 큰 값을 찾아 떠나자.
+		binarySearch(stones, k, mid + 1, right);
+	}
+	else {
+		//건널 수 없다면 mid보다 작은 값을 찾아 떠나자.
+		binarySearch(stones, k, left, mid - 1);
+	}
+}
+
+int solution(vector<int> stones, int k) {
+	int answer = 0;
+	
+	maxval = 0;
+	binarySearch(stones, k, 0, MAX);
+	answer = maxval;
+
+	return answer;
+}
