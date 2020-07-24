@@ -1,0 +1,87 @@
+#include <string>
+#include <vector>
+
+using namespace std;
+
+//https://hwan-shell.tistory.com/118 이 분의 풀이....ㅠㅠ
+/*
+200724
+어려운 문제가 아니었다고 하는데.. 나는 어려워 ㅋㅋㅋ. 시작을 못하겠던데.
+이로써 내가 퇴화되고 있다는 증거.
+이게 낸 문제중에 제일 쉬운 문제였다고 한다.. 끙...
+
+내가 이 문제 처음에 봤을 때 든 생각은
+1. 압축시작하는 위치에 따라서 결과가 다른 거 아니야?
+->근데 이 풀이는 꼭 맨 처음부터 시작하는 풀이인데..
+결국 이렇게 풀어야하는건가 싶음..
+ㅠ
+2. 어떤 개수가 최적인지 어떻게 알아?
+->결국 길이를 1부터 길이/2 까지 다 해보는 거였음.
+...
+
+어려운 점은 문자열 다룰 때 건너뛰는 거 생각할 때
+좀 헷갈려. 나는 그래.
+for문에서 i++를 자주 쓰는데 하나씩 말고 더 크게 점프해도 되는 거
+안익숙해.
+*/
+
+int solution(string s) {
+	int answer = s.length();
+
+	//길이가 1이면 굳이 할 필요가 없으니까 그렇겠지.
+	if (s.length() == 1) return 1;
+
+	//길이 i에서부터 반까지 잘라서 볼거야.
+	for (int i = 1; i <= s.length() / 2; i++) {
+		int count = 1;
+		string cutStr = s.substr(0, i);
+		//cmp는 비교하려고 새로 잘라본애고
+		//myStr는 결과적으로 마지막에 압축 끝난 애고.
+		string cmp, myStr;
+
+		//길이 i로 잘랐으니까 다음번에 볼 애는
+		//i길이씩 이동하면서 보겠지.
+		//cmp가 새로 자른거고 cutStr이 그 이전에 자른 거라고
+		//생각하고 비교해가면 되는거지?
+		for (int j = i; j < s.length(); j += i) {
+			cmp = s.substr(j, i);
+
+			if (cutStr == cmp) {
+				//같은 문자라면
+				count++;
+			}
+			else {
+				//다르다면
+				if (count == 1) {
+					//다른데 이때까지
+					//연속되는 애가 없었던 거임
+					//그러면 숫자 남길 거 없음.
+					myStr += cutStr;
+					cutStr = cmp;
+				}
+				else {
+					//이때까지 연속된 게 있었던 경우에는
+					//압축하기 위해 숫자 쓰고 압축된 문자열 써준다.
+					myStr = myStr + to_string(count) + cutStr;
+					cutStr = cmp;
+					count = 1;
+				}
+			}
+
+			//이거는 다음으로 넘어가면 확인 못하는 길이일 때 
+			if (j + i >= s.length()) {
+				if (count != 1) {
+					myStr = myStr + to_string(count) + cutStr;
+					break;
+				}
+				else {
+					myStr = myStr + cutStr;
+					break;
+				}
+			}
+		}
+		answer = (answer > myStr.length()) ? myStr.length() : answer;
+	}
+
+	return answer;
+}
